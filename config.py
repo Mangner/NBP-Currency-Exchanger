@@ -1,0 +1,1 @@
+URL = "http://api.nbp.pl/api/exchangerates/tables/a/?format=json"
