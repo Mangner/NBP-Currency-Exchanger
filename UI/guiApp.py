@@ -10,20 +10,20 @@ class GuiApp(ctk.CTk):
         self._converter = converter
         self._table = None 
 
-        self.title("Kalkulator Walut NBP")
+        self.title("NBP Currency Calculator")
         self.geometry("400x350")
 
         self._init_ui()
         self._load_data()
 
     def _init_ui(self):
-        self.lbl_amount = ctk.CTkLabel(self, text="Kwota:")
+        self.lbl_amount = ctk.CTkLabel(self, text="Amount:")
         self.lbl_amount.pack(pady=5)
         
         self.entry_amount = ctk.CTkEntry(self)
         self.entry_amount.pack(pady=5)
 
-        self.lbl_from = ctk.CTkLabel(self, text="Z waluty:")
+        self.lbl_from = ctk.CTkLabel(self, text="From currency:")
         self.lbl_from.pack(pady=5)
         
         self.combo_from = ctk.CTkComboBox(
@@ -32,7 +32,7 @@ class GuiApp(ctk.CTk):
         )
         self.combo_from.pack(pady=5)
 
-        self.lbl_to = ctk.CTkLabel(self, text="Na walutę:")
+        self.lbl_to = ctk.CTkLabel(self, text="To currency:")
         self.lbl_to.pack(pady=5)
         
         self.combo_to = ctk.CTkComboBox(
@@ -41,10 +41,10 @@ class GuiApp(ctk.CTk):
         )
         self.combo_to.pack(pady=5)
 
-        self.btn_calc = ctk.CTkButton(self, text="Przelicz", command=self._calculate)
+        self.btn_calc = ctk.CTkButton(self, text="Convert", command=self._calculate)
         self.btn_calc.pack(pady=20)
 
-        self.lbl_result = ctk.CTkLabel(self, text="Wynik: ---", font=("Arial", 18))
+        self.lbl_result = ctk.CTkLabel(self, text="Result: ---", font=("Arial", 18))
         self.lbl_result.pack(pady=10)
 
     def _load_data(self):
@@ -61,7 +61,7 @@ class GuiApp(ctk.CTk):
             self.combo_to.set("USD")
             
         except Exception as e:
-            self.lbl_result.configure(text=f"Błąd połączenia!", text_color="red")
+            self.lbl_result.configure(text="Connection error!", text_color="red")
             print(f"DEBUG ERROR: {e}") 
 
     def _calculate(self):
@@ -74,7 +74,7 @@ class GuiApp(ctk.CTk):
             code_to = self.combo_to.get()
 
             if self._table is None:
-                 self.lbl_result.configure(text="Brak danych NBP", text_color="red")
+                 self.lbl_result.configure(text="No NBP data", text_color="red")
                  return
 
             rate_from = self._find_rate(code_from)
@@ -84,10 +84,10 @@ class GuiApp(ctk.CTk):
                 result = self._converter.convert(amount, rate_from, rate_to)
                 self.lbl_result.configure(text=f"{result:.2f} {code_to}", text_color="white")
             else:
-                 self.lbl_result.configure(text="Błąd waluty", text_color="red")
+                 self.lbl_result.configure(text="Currency error", text_color="red")
 
         except ValueError:
-            self.lbl_result.configure(text="Błędna kwota", text_color="red")
+            self.lbl_result.configure(text="Invalid amount", text_color="red")
 
     def _find_rate(self, code):
         if code == "PLN":
